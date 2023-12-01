@@ -3,33 +3,7 @@
  * URL: https://adventofcode.com/2023/day/1
  * */
 
-/*
-* Calcula el valor total de calibración según las reglas especificadas.
-*
-* Esta función procesa un string multilínea, donde cada línea representa un conjunto de datos.
-* Para cada línea, extrae todos los dígitos numéricos, forma un nuevo número utilizando
-* el primer y último dígito de estos, y acumula estos números en un vector.
-* Finalmente, suma todos los valores en el vector para obtener el valor total de calibración.
-*
-* # Arguments
-*
-* `input` - Una referencia a un string que contiene el conjunto de datos de entrada,
-*           donde cada línea es separada por saltos de línea.
-* # Returns
-* Retorna el valor total de calibración como un `u32`.
-*
-* # Examples
-*
-* ```
-* let input = "12ab\n34cd\n56ef";
-* let total = get_calibration_value_part_1(input);
-* assert_eq!(total, 127); // 12 + 34 + 56 = 127
-* ```
-* # Panics
-* La función puede entrar en pánico si alguna línea no contiene dígitos,
-* ya que `unwrap` es llamado en un `Option` que podría ser `None`.
-*/
-/// Calculates the total calibration value according to the specified rules.
+/// Calculate the total calibration value according to part 1.
 ///
 /// This function processes a multi-line string, where each line represents a data set.
 /// For each line, it extracts all the numeric digits, forms a new number using
@@ -63,6 +37,10 @@ fn get_calibration_value_part_1(input: &str) -> u32 {
   for line in input.lines() {
     let numbers: Vec<u32> = line.chars().filter_map(|c| c.to_digit(10)).collect();
 
+    if numbers.is_empty() {
+      continue;
+    }
+
     values.push(
       format!("{}{}", numbers.first().unwrap(), numbers.last().unwrap())
         .parse()
@@ -73,7 +51,8 @@ fn get_calibration_value_part_1(input: &str) -> u32 {
   values.into_iter().sum()
 }
 
-fn get_calibration_value_part_2(input: &str) -> u32 {
+/// Calculate the total calibration value according to part 2.
+fn get_calibration_value_part_2(_input: &str) -> u32 {
   todo!()
 }
 
@@ -94,10 +73,68 @@ mod tests {
   use super::*;
 
   #[test]
-  fn test_get_calibration_value_part_1() {
-    let input = "ninefourone1\n28gtbkszmrtmnineoneightmx\n";
-    let value = get_calibration_value_part_1(input);
+  fn test_simple_numbers() {
+    assert_eq!(get_calibration_value_part_1("ninefourone1\n"), 11);
+  }
 
-    assert_eq!(value, 39);
+  #[test]
+  fn test_mixed_numbers_and_words() {
+    assert_eq!(get_calibration_value_part_1("53sevenvvqm\n"), 53);
+  }
+
+  #[test]
+  fn test_long_string_with_multiple_numbers() {
+    assert_eq!(
+      get_calibration_value_part_1("kscpjfdxp895foureightckjjl1\n"),
+      81
+    );
+  }
+
+  #[test]
+  fn test_single_digit_numbers() {
+    assert_eq!(get_calibration_value_part_1("72fivebt9ndgq\n"), 79);
+  }
+
+  #[test]
+  fn test_numbers_with_letters_in_between() {
+    assert_eq!(
+      get_calibration_value_part_1("28gtbkszmrtmnineoneightmx\n"),
+      28
+    );
+  }
+
+  #[test]
+  fn test_only_letters() {
+    assert_eq!(
+      get_calibration_value_part_1("four66jqrbtqcsxjtqjvfjhl1\n"),
+      61
+    );
+  }
+
+  #[test]
+  fn test_numbers_at_the_end() {
+    assert_eq!(
+      get_calibration_value_part_1("rgxjrsldrfmzq25szhbldzqhrhbjpkbjlsevenseven\n"),
+      25
+    );
+  }
+
+  #[test]
+  fn test_multiple_lines() {
+    let input = "slkjvk4threesevenznjqmmfive\n61ppgrkmkfhteightone1\n";
+    assert_eq!(get_calibration_value_part_1(input), 105);
+  }
+
+  #[test]
+  fn test_empty_string() {
+    assert_eq!(get_calibration_value_part_1(""), 0);
+  }
+
+  #[test]
+  fn test_no_numbers() {
+    assert_eq!(
+      get_calibration_value_part_1("no numbers here\nanother line\n"),
+      0
+    );
   }
 }

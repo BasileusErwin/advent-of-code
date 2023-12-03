@@ -134,8 +134,41 @@ fn part1(input: &str) -> u32 {
     .sum()
 }
 
+/// Calculates an aggregate value based on a specific set of criteria applied to the
+/// numbers and symbols in an input string.
+///
+/// This function takes an input string that is processed to extract numbers and symbols.
+/// Then, for each symbol in the input, a specific calculation is performed based on the numbers that meet certain criteria
+/// related to the position of the symbol.
+/// The final result is the sum of the products of the numbers that meet the criteria for each symbol,
+/// but only if exactly two numbers meet this criterion for a given symbol.
+///
+/// # Parameters
+/// 
+/// * `input` - A string (`&str`) containing the numbers and symbols to be processed.
+///
+/// # Returns
+/// 
+/// An `u32` which is the sum of the products of the numbers that meet the specified criterion
+/// for each symbol in the input, provided that exactly two numbers meet this criterion for each symbol.
 fn part2(input: &str) -> u32 {
-  todo!()
+  const REQUIRED_MATCHES: u32 = 2;
+
+  let (numbers, symbols): (Vec<Number>, HashSet<(usize, usize)>) = parse(input, true);
+
+  symbols.iter().fold(0, |acc, &(x, y)| {
+    let (product, match_count) = numbers
+      .iter()
+      .filter(|number| number.check(x, y))
+      .fold((1, 0), |(prod, count), number| {
+        (prod * number.number, count + 1)
+      });
+
+    match (product, match_count) {
+      (_, REQUIRED_MATCHES) => acc + product,
+      (_, _) => acc,
+    }
+  })
 }
 
 fn main() {

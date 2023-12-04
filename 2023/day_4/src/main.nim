@@ -8,6 +8,7 @@ const
   filename: string = "input.txt"
 
 type Numbers = object
+  id: int
   winning: seq[int]
   numbers: seq[int]
 
@@ -15,9 +16,11 @@ proc getNumber(input: string): seq[Numbers] =
   let inputSplited: seq[string] = input.replace(re"Card \d+:", " ").split("\n")
   var numbers: seq[Numbers] = newSeq[Numbers]()
 
+  var id: int = -1
   for line in inputSplited:
     var lineSplited: seq[string] = line.strip().split(" ")
 
+    id = id + 1
     var isWinningNumber: bool = true
     var winningNumber: seq[int] = newSeq[int]()
     var userNumbers: seq[int] = newSeq[int]()
@@ -33,7 +36,7 @@ proc getNumber(input: string): seq[Numbers] =
       else:
         userNumbers.add(i.parseInt())
 
-    numbers.add(Numbers(winning: winningNumber, numbers: userNumbers))
+    numbers.add(Numbers(id: id, winning: winningNumber, numbers: userNumbers))
 
   return numbers
 
@@ -52,8 +55,33 @@ proc part1(numbers: seq[Numbers]) =
 
   echo("Part 1: ", totalPoints)
 
+proc countingCoincidences(card: Numbers): int =
+  var coincidences: int = 0
+
+  for userNumber in card.numbers:
+    if userNumber in card.winning:
+      coincidences = coincidences + 1
+
+  return coincidences
+
+proc calculateTotalCards(cards: seq[Numbers]): int =
+  var
+    totalCards = -1
+    queueCard = cards
+
+  while queueCard.len != 0:
+    let currentCard: Numbers  = queueCard.pop()
+    let coincidences: int = countingCoincidences(currentCard)
+    totalCards += 1
+
+    for i in 1 .. coincidences:
+      if currentCard.id + i < cards.len:
+        queueCard.add(cards[currentCard.id + i])
+
+  return totalCards
+
 proc part2(numbers: seq[Numbers]) =
-  echo("Part 2: ", 0)
+  echo(calculateTotalCards(numbers))
 
 proc main() =
   let file = open(filename)

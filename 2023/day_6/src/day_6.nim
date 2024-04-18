@@ -1,7 +1,7 @@
 #[
-
+  AoC: Day 6: Wait For It
+  URL: https://adventofcode.com/2023/day/6
 ]#
-
 import strutils
 import sequtils
 
@@ -18,7 +18,7 @@ proc processInput(input: string): InputType =
 
   return (time, distance)
 
-proc part1(data: InputType) = 
+proc part1(data: InputType): int = 
   var 
     times: seq[int] = data.times
     distances: seq[int] = data.distances
@@ -40,7 +40,15 @@ proc part1(data: InputType) =
 
     total *= winningWays
 
-  echo total
+  return total
+
+proc part2(data: InputType): int =
+  var
+    time: int = data.times.map(proc (x: int): string = x.intToStr()).join("").parseInt()
+    distance: int = data.distances.map(proc (x: int): string = x.intToStr()).join("").parseInt()
+
+  return part1((@[time], @[distance]))
+
 
 proc main() =
   var input: string = ""
@@ -50,11 +58,12 @@ proc main() =
 
     input = file.readAll()
   except: 
-    echo "No file found"
+    echo("No file found")
 
-  var data: InputType = processInput(input)
-  part1(data)
+  let data: InputType = processInput(input)
 
+  echo("Part 1: " & $part1(data))
+  echo("Part 2: " & $part2(data))
 
 when isMainModule:
   main()

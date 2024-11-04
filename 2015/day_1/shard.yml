@@ -1,0 +1,13 @@
+name: day_1
+version: 0.1.0
+
+authors:
+  - Ignacio Perez <ignacio.perez2123@protonmail.com>
+
+targets:
+  day_1:
+    main: src/day_1.cr
+
+crystal: '>= 1.11.2'
+
+license: MIT

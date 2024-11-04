@@ -5,3 +5,7 @@ dist/
 build/
 
 compile_commands.json
+
+.direnv
+
+bin/

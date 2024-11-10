@@ -36,7 +36,7 @@ let part_1 values =
     0 values
 
 (* Calculate the ribbon length needed for a box *)
-let ribbon_length values =
+let ribbon_length (values : int list list) : int  =
   match List.sort compare values with
   | side1 :: side2 :: _ -> (
       let smallest_perimeter = 2 * (side1 + side2) in
@@ -46,12 +46,12 @@ let ribbon_length values =
   | _ -> 0
 
 (* Calculate the total ribbon length needed for all boxes (Part 2) *)
-let part_2 values =
+let part_2 (values : int list list ) : int =
   List.fold_left (fun acc value -> acc + ribbon_length value) 0 values
 
 let () =
-  let filename = "input.txt" in
-  let lines = read_file filename in
-  let values = split_inputs lines in
+  let filename : string = "input.txt" in
+  let lines : string list = read_file filename in
+  let values : int list list = split_inputs lines in
   Printf.printf "Part 1: %d\n" (part_1 values);
   Printf.printf "Part 2: %d\n" (part_2 values)

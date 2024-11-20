@@ -9,3 +9,7 @@ compile_commands.json
 .direnv
 
 bin/
+
+*.o
+*.out
+2015/day_3/day_3

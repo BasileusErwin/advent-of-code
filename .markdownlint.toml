@@ -1,0 +1,5 @@
+[line-length]
+code_block_line_lengt = 120
+code_blocks = true
+heading_line_length = 120
+line_length = 120
